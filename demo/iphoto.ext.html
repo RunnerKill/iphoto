@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <title>首页</title>
+    <link rel="stylesheet" href="media/template.css" />
+    <script src="media/jquery-2.0.3.js"></script>
+    <script src="iphoto/iphoto.js"></script>
+    <script src="iphoto/iphoto.ext.js"></script>
+    <style type="text/css">
+    .images {
+        height: 100px;
+    }
+    #images1 {
+        background-color: lightGreen;
+    }
+    #images2 {
+        background-color: pink;
+    }
+    </style>
+    <script type="text/javascript">
+    $(function() {
+        $('.images').iphoto_init({
+            server : 'http://192.168.1.149:8780/fs',
+            project : 'swfile',
+            onError : function(msg) {
+                console.error(msg);
+            }
+        });
+        $("#btn_upload").click(function() {
+            $('.images').iphoto_upload({
+                beforeUpload : function() {return true;}, // return false 表示不上传
+                onProgress : function(index, done, total) {
+                    console.log(index + ":" + done + "/" + total);
+                },
+                onUpload : function(index, file) {
+                    console.log(file);
+                },
+                onComplete : function(files) {
+                    console.log(files);
+                }
+            });
+        });
+    });
+    </script>
+</head>
+<body>
+    <div id="images1" class="images" data-module="m1" data-limit="3"></div>
+    <div id="images2" class="images" data-module="m2"></div>
+    <input id="id_test" type="hidden" value="" />
+    <input id="btn_upload" type="button" value="upload" />
+    <input id="btn_get" type="button" value="get" />
+    <input id="btn_remove" type="button" value="remove" />
+</body>
+</html>

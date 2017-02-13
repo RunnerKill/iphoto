@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <title>首页</title>
+    <link rel="stylesheet" href="media/template.css" />
+    <script src="media/jquery-2.0.3.js"></script>
+    <script src="iphoto/iphoto.js"></script>
+    <script type="text/javascript">
+    $(function() {
+        var iphoto = IPhoto({
+            server : "http://192.168.1.149:8780/fs",
+            ready : function(iphoto) {
+                console.log(iphoto);
+            }
+        });
+        $("#file").change(function(e) {
+            var files = e.target.files || e.dataTransfer.files;
+            iphoto.upload({
+                files : files,
+                project : 'swfile',
+                module : 'test',
+                onProgress : function(index, done, total) {
+                    console.log(index + ":" + done + "/" + total);
+                },
+                onUpload : function(index, file) {
+                    console.log(file);
+                },
+                onComplete : function(files) {
+                    console.log(files);
+                    $("#id_test").val(files[0].id);
+                }
+            });
+        });
+        $("#btn_get").click(function() {
+            iphoto.get($("#id_test").val(), function(file) {
+                console.log(file);
+            });
+        });
+        $("#btn_remove").click(function() {
+            iphoto.remove($("#id_test").val(), function(file) {
+                console.log(file);
+            });
+        });
+    });
+    </script>
+</head>
+<body>
+    <input id="file" type="file" accept="image/*" multiple="multiple" capture="photo" />
+    <input id="id_test" type="hidden" value="" />
+    <input id="btn_get" type="button" value="get" />
+    <input id="btn_remove" type="button" value="remove" />
+</body>
+</html>
